@@ -3,6 +3,11 @@ const bcrypt = require('bcrypt')
 const config = require('config')
 const userService = require('../service/user.service')
 
+const getAllEntries = async(req,res)=>{
+    const allEntris = await User.find()
+    return res.send(allEntris)
+}
+
 const getLoginForm = (req,res)=>{
     res.render('login/layout')
 }
@@ -35,4 +40,4 @@ const signup = async(req,res)=>{
     return res.render('signup/layout',{message:'user created'})
 }
 
-module.exports ={getLoginForm,login,getSignupForm,signup}
+module.exports ={getLoginForm,login,getSignupForm,signup,getAllEntries}
