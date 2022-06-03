@@ -2,8 +2,10 @@ const User = require('../model/user')
 const bcrypt = require('bcrypt')
 const config = require('config')
 const userService = require('../service/user.service')
+const {userValidateSchema} = require('../validator/user.validator')
 
 const getAllEntries = async(req,res)=>{
+   
     const allEntris = await User.find()
     return res.send(allEntris)
 }
@@ -31,6 +33,10 @@ const getSignupForm = (req,res)=>{
 const signup = async(req,res)=>{
     const {email,password} = req.body
     const fields = {email,password}
+    const {error,value} = userValidateSchema(fields)
+    if(error){
+        return res.render('signup/layout',{message:error.details[0].message})
+    }
     const hashedPassword = await bcrypt.hash(password,config.get('hashed.salt'))
     const findUser = await userService.findUser({email})
     if(findUser){
